@@ -8,7 +8,12 @@ interface User {
   socket: WebSocket;
   room: string;
 }
-
+interface joinMessage {
+  type: string;
+  payload: {
+    room: string;
+  };
+}
 wss.on("connection", (socket) => {
   socket.on("message", (message) => {});
 });
