@@ -1,11 +1,7 @@
 import { useRef, useState } from "react";
 
 const Room = () => {
-  const [messages, setMessages] = useState([
-    "hi there",
-    "hi theere",
-    "hi theeere",
-  ]);
+  const [messages, setMessages] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
