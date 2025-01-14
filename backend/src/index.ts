@@ -27,6 +27,11 @@ ws.on("connection", (socket) => {
           currentUserRoom = allSockets[i].room;
         }
       }
+      allSockets.map((s) => {
+        if (s.room === currentUserRoom) {
+          s.socket.send(parsedMessage.payload.message);
+        }
+      });
     }
   });
 });
