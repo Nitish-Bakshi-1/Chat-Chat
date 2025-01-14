@@ -6,7 +6,7 @@ const Room = () => {
     "hi theere",
     "hi theeere",
   ]);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="w-full h-screen flex flex-col lg:flex-row  justify-around items-center">
