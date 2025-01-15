@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 const Room = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const wsRef = useRef();
+  const wsRef = useRef<WebSocket>();
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
@@ -38,8 +38,8 @@ const Room = () => {
       <div className=" leftPortion flex flex-col items-center justify-center pt-4   w-[70%] h-[90vh]">
         <div className="w-full h-[80vh]  flex justify-center items-center">
           <div className="w-[95%] h-[95%] bg-[#2f3640] p-20 rounded-lg">
-            {messages.map((message) => (
-              <div className="min-h-[5vh]">
+            {messages.map((message, index) => (
+              <div className="min-h-[5vh]" key={index}>
                 <span className="bg-white text-[#2f3640] px-2 py-1 rounded">
                   {message}
                 </span>
@@ -58,7 +58,7 @@ const Room = () => {
           <button
             onClick={() => {
               const message = inputRef.current?.value;
-              wsRef.current.send(
+              wsRef.current?.send(
                 JSON.stringify({
                   type: "chat",
                   payload: {
@@ -66,6 +66,9 @@ const Room = () => {
                   },
                 })
               );
+              if (inputRef.current?.value) {
+                inputRef.current.value = "";
+              }
             }}
             className="mt-2 px-10 py-4 focus:bg-[#2f3640] focus:text-white border-2 border-[#2f3640]"
           >
