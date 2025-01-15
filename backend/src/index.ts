@@ -17,7 +17,7 @@ ws.on("connection", (socket) => {
     const parsedMessage = JSON.parse(message);
     const { username, room } = parsedMessage.payload;
     if (parsedMessage.type === "join") {
-      if (username & room) {
+      if (username && room) {
         allSockets.push({
           socket,
           room,
