@@ -4,16 +4,17 @@ const Room = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>(
     []
   );
+  const [username, setUsername] = useState<string>("ab"); // Added username state
   const inputRef = useRef<HTMLInputElement>(null);
   const wsRef = useRef<WebSocket>();
-  const currentUser = "ab";
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
     ws.onmessage = (event) => {
-      const mess = JSON.parse(event.data.toString());
-      setMessages((messages) => [...messages, mess]);
+      const msg = JSON.parse(event.data.toString());
+      setMessages((messages) => [...messages, msg]);
     };
+
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -21,7 +22,9 @@ const Room = () => {
         JSON.stringify({
           type: "join",
           payload: {
+            // TODO: room logic
             room: "red",
+            username,
           },
         })
       );
@@ -45,9 +48,7 @@ const Room = () => {
             {messages.map((message, index) => (
               <div
                 className={`min-h-[5vh] flex ${
-                  message.sender === currentUser
-                    ? "justify-end"
-                    : "justify-start"
+                  message.sender === username ? "justify-end" : "justify-start"
                 }`}
                 key={index}
               >
@@ -70,13 +71,11 @@ const Room = () => {
             onClick={() => {
               const message = inputRef.current?.value;
               if (message) {
-                const messageData = { text: message, sender: currentUser };
+                const messageData = { text: message, sender: username };
                 wsRef.current?.send(
                   JSON.stringify({
                     type: "chat",
-                    payload: {
-                      message: messageData,
-                    },
+                    payload: messageData,
                   })
                 );
                 setMessages((prevMessages) => [...prevMessages, messageData]);
