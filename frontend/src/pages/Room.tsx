@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
 const Room = () => {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<{ text: string; sender: string }[]>(
+    []
+  );
   const inputRef = useRef<HTMLInputElement>(null);
   const wsRef = useRef<WebSocket>();
+  const currentUser = "ab";
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
     ws.onmessage = (event) => {
-      setMessages((messages) => [...messages, event.data]);
+      const mess = JSON.parse(event.data.toString());
+      setMessages((messages) => [...messages, mess]);
     };
     wsRef.current = ws;
 
@@ -39,9 +43,16 @@ const Room = () => {
         <div className="w-full h-[80vh]  flex justify-center items-center">
           <div className="w-[95%] h-[95%] bg-[#2f3640] p-20 rounded-lg">
             {messages.map((message, index) => (
-              <div className="min-h-[5vh]" key={index}>
+              <div
+                className={`min-h-[5vh] flex ${
+                  message.sender === currentUser
+                    ? "justify-end"
+                    : "justify-start"
+                }`}
+                key={index}
+              >
                 <span className="bg-white text-[#2f3640] px-2 py-1 rounded">
-                  {message}
+                  {message.text}
                 </span>
               </div>
             ))}
@@ -58,14 +69,19 @@ const Room = () => {
           <button
             onClick={() => {
               const message = inputRef.current?.value;
-              wsRef.current?.send(
-                JSON.stringify({
-                  type: "chat",
-                  payload: {
-                    message: message,
-                  },
-                })
-              );
+              if (message) {
+                const messageData = { text: message, sender: currentUser };
+                wsRef.current?.send(
+                  JSON.stringify({
+                    type: "chat",
+                    payload: {
+                      message: messageData,
+                    },
+                  })
+                );
+                setMessages((prevMessages) => [...prevMessages, messageData]);
+              }
+
               if (inputRef.current?.value) {
                 inputRef.current.value = "";
               }
