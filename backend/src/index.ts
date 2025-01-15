@@ -56,4 +56,7 @@ ws.on("connection", (socket) => {
       });
     }
   });
+  socket.on("close", () => {
+    allSockets = allSockets.filter((user) => user.socket !== socket); // Remove user on disconnect
+  });
 });
