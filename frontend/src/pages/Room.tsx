@@ -1,8 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Room = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8080");
+    ws.onmessage = (event) => {};
+  }, []);
 
   return (
     <div className="w-full h-screen flex flex-col lg:flex-row  justify-around items-center">
@@ -28,22 +33,16 @@ const Room = () => {
           </div>
         </div>
         <div className="w-full h-[20vh] flex flex-col justify-center items-center ">
+          // TODO:
           <input
             ref={inputRef}
             type="text"
             placeholder="Type your message here ..."
             className="w-[95%] h-[55%] rounded-lg bg-[#2f3640] text-white px-10 text-xl"
           />
+          // TODO:
           <button
-            onClick={() => {
-              let inputValue = inputRef.current?.value;
-              if (inputValue) {
-                setMessages([...messages, inputValue]);
-                if (inputRef.current) {
-                  inputRef.current.value = "";
-                }
-              }
-            }}
+            onClick={() => {}}
             className="mt-2 px-10 py-4 focus:bg-[#2f3640] focus:text-white border-2 border-[#2f3640]"
           >
             SEND
