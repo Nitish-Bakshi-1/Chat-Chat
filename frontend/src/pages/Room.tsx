@@ -3,10 +3,25 @@ import { useEffect, useRef, useState } from "react";
 const Room = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const wsRef = useRef();
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
-    ws.onmessage = (event) => {};
+    ws.onmessage = (event) => {
+      setMessages((messages) => [...messages, event.data]);
+    };
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      ws.send(
+        JSON.stringify({
+          type: "join",
+          payload: {
+            room: "red",
+          },
+        })
+      );
+    };
   }, []);
 
   return (
@@ -33,16 +48,25 @@ const Room = () => {
           </div>
         </div>
         <div className="w-full h-[20vh] flex flex-col justify-center items-center ">
-          // TODO:
           <input
             ref={inputRef}
             type="text"
             placeholder="Type your message here ..."
             className="w-[95%] h-[55%] rounded-lg bg-[#2f3640] text-white px-10 text-xl"
           />
-          // TODO:
+
           <button
-            onClick={() => {}}
+            onClick={() => {
+              const message = inputRef.current?.value;
+              wsRef.current.send(
+                JSON.stringify({
+                  type: "chat",
+                  payload: {
+                    message: message,
+                  },
+                })
+              );
+            }}
             className="mt-2 px-10 py-4 focus:bg-[#2f3640] focus:text-white border-2 border-[#2f3640]"
           >
             SEND
