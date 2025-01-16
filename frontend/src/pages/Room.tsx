@@ -78,7 +78,7 @@ const Room = () => {
                 key={index}
               >
                 <span className="bg-white text-[#2f3640] px-2 py-1 rounded">
-                  {message.text}
+                  {message.sender} sent = {message.text}
                 </span>
               </div>
             ))}

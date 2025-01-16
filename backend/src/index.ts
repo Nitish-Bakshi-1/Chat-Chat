@@ -11,6 +11,7 @@ let allSockets: User[] = [];
 const ws = new WebSocketServer({ port: 8080 });
 
 ws.on("connection", (socket) => {
+  console.log("user connected");
   socket.on("message", (message: string) => {
     try {
       const parsedMessage = JSON.parse(message);
@@ -20,27 +21,20 @@ ws.on("connection", (socket) => {
         const { username, room } = payload;
         if (username && room) {
           allSockets.push({ socket, room, username });
-          console.log(`${username} joined room ${room}`);
         }
       }
 
       if (type === "chat") {
-        const { message: chatMessage, username } = payload;
+        const { message: chatMessage, username } = payload; // destructured message from payload and assigned its value to chatMessage variable
         if (!chatMessage) {
-          console.log("Empty message received, ignoring");
           return;
         }
 
         const currentUser = allSockets.find((user) => user.socket === socket);
 
         if (!currentUser) {
-          console.log("No current user found");
           return;
         }
-
-        console.log(
-          `Broadcasting message: "${chatMessage}" from ${currentUser.username} in room ${currentUser.room}`
-        );
 
         // Broadcasting message to all users in the same room
         allSockets.forEach((user) => {
