@@ -10,8 +10,12 @@ const Login = () => {
   return (
     <div className="w-full h-screen flex justify-center items-center flex-col">
       <h1 className="font-bold text-2xl">LOGIN</h1>
-      <input className="" ref={usernameInputRef} placeholder="username" />
-      <input placeholder="room" />
+      <input
+        className="border-2 border-black"
+        ref={usernameInputRef}
+        placeholder="username"
+      />
+      <input className="border-2 border-black" placeholder="room" />
 
       <button
         onClick={() => {
@@ -19,8 +23,6 @@ const Login = () => {
           if (username) {
             setUsername(username);
             navigate("/room");
-          } else {
-            return <div>enter username</div>;
           }
         }}
         className="p-4 focus:bg-black m-4 focus:text-white border-2 border-black"

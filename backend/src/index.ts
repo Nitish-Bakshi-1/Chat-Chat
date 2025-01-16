@@ -11,7 +11,6 @@ let allSockets: User[] = [];
 const ws = new WebSocketServer({ port: 8080 });
 
 ws.on("connection", (socket) => {
-  console.log("user connected");
   socket.on("message", (message: string) => {
     try {
       const parsedMessage = JSON.parse(message);
@@ -21,6 +20,7 @@ ws.on("connection", (socket) => {
         const { username, room } = payload;
         if (username && room) {
           allSockets.push({ socket, room, username });
+          console.log("user connected" + username);
         }
       }
 
