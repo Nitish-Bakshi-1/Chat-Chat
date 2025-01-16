@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { usernameAtom } from "../states/atoms";
 
 const Room = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>(
     []
   );
-  const [username, setUsername] = useState<string>("ab");
+  const username = useRecoilValue<string>(usernameAtom);
   const inputRef = useRef<HTMLInputElement>(null);
   const wsRef = useRef<WebSocket>();
 
