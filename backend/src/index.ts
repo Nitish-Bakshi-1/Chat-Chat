@@ -20,7 +20,7 @@ ws.on("connection", (socket) => {
         const { username, room } = payload;
         if (username && room) {
           allSockets.push({ socket, room, username });
-          console.log("user connected" + username);
+          console.log("user connected " + username);
         }
       }
 
