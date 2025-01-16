@@ -6,7 +6,7 @@ interface User {
   username: string;
 }
 
-let rooms: Record<string, User[]> = {}; // Object to store users by room
+let allSockets: User[] = [];
 
 const ws = new WebSocketServer({ port: 8080 });
 
@@ -18,68 +18,34 @@ ws.on("connection", (socket) => {
 
       if (type === "join") {
         const { username, room } = payload;
-
-        // Add user to the room
         if (username && room) {
-          if (!rooms[room]) {
-            rooms[room] = [];
-          }
-
-          rooms[room].push({ socket, room, username });
-          console.log(`User ${username} joined room ${room}`);
-
-          // Notify other users in the room
-          rooms[room].forEach((user) => {
-            user.socket.send(
-              JSON.stringify({
-                type: "userJoined",
-                payload: { username, room },
-              })
-            );
-          });
+          allSockets.push({ socket, room, username });
+          console.log("user connected " + username);
         }
       }
 
       if (type === "chat") {
-        const { message: chatMessage, username } = payload;
-
+        const { message: chatMessage, username } = payload; // destructured message from payload and assigned its value to chatMessage variable
         if (!chatMessage) {
           return;
         }
+        // here we have checked the person who joined and the person who is sending message is same or not and if they are then set its socket to currentUser variable
+        const currentUser = allSockets.find((user) => user.socket === socket);
 
-        // Find the user who sent the message
-        const currentUser = Object.values(rooms)
-          .flat()
-          .find((user) => user.socket === socket);
         if (!currentUser) {
           return;
         }
 
-        // Broadcast the message to all users in the same room
-        rooms[currentUser.room].forEach((user) => {
-          user.socket.send(
-            JSON.stringify({
-              type: "chat",
-              payload: { message: chatMessage, sender: currentUser.username },
-            })
-          );
-        });
-      }
-
-      if (type === "leave") {
-        const { username, room } = payload;
-
-        // Remove user from the room
-        rooms[room] = rooms[room].filter((user) => user.username !== username);
-
-        // Notify others in the room
-        rooms[room].forEach((user) => {
-          user.socket.send(
-            JSON.stringify({
-              type: "userLeft",
-              payload: { username, room },
-            })
-          );
+        // Broadcasting message to all users in the same room
+        allSockets.forEach((user) => {
+          if (user.room === currentUser.room) {
+            user.socket.send(
+              JSON.stringify({
+                text: chatMessage,
+                sender: currentUser.username,
+              })
+            );
+          }
         });
       }
     } catch (error) {
@@ -88,9 +54,7 @@ ws.on("connection", (socket) => {
   });
 
   socket.on("close", () => {
-    // Clean up users when they disconnect
-    Object.keys(rooms).forEach((room) => {
-      rooms[room] = rooms[room].filter((user) => user.socket !== socket);
-    });
+    console.log("User disconnected");
+    allSockets = allSockets.filter((user) => user.socket !== socket);
   });
 });

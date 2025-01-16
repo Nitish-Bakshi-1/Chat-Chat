@@ -21,7 +21,7 @@ const Login = () => {
         <input
           className="px-8 py-4 border-2 border-black"
           ref={roomInputRef}
-          placeholder="username"
+          placeholder="room"
         />
 
         <button

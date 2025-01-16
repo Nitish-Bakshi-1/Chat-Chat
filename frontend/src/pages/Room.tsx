@@ -61,11 +61,6 @@ const Room = () => {
     <div className="w-full h-screen flex flex-col lg:flex-row justify-around items-center">
       <div className="rightPortion bg-[#ecf0f1] h-screen w-[30%] flex justify-center items-center flex-col gap-5">
         <h1 className="text-4xl uppercase font-bold">room:{room}</h1>
-        <div className="text-left">
-          <h1 className=" text-2xl uppercase font-semibold mb-4 ">members</h1>
-          <p>gh</p>
-          <p>bh </p>
-        </div>
       </div>
       <div className="leftPortion flex flex-col items-center justify-center  w-[70%] h-[90vh]">
         <div className="w-full h-[80vh] flex overflow-hidden justify-center items-center">
