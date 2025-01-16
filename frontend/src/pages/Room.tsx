@@ -31,7 +31,6 @@ const Room = () => {
       );
     };
 
-    // Cleanup on unmount
     return () => {
       ws.close();
     };
