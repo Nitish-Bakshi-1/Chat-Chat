@@ -11,13 +11,6 @@ const Room = () => {
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
 
-    ws.onmessage = (event) => {
-      const msg = JSON.parse(event.data.toString());
-      setMessages((prevMessages) => [...prevMessages, msg]);
-    };
-
-    wsRef.current = ws;
-
     ws.onopen = () => {
       ws.send(
         JSON.stringify({
@@ -29,6 +22,13 @@ const Room = () => {
         })
       );
     };
+
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data.toString());
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    };
+
+    wsRef.current = ws;
 
     return () => {
       ws.close();
