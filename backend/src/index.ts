@@ -7,6 +7,7 @@ interface User {
 }
 
 let allSockets: User[] = [];
+let rooms: Record<string, User[]> = {};
 
 const ws = new WebSocketServer({ port: 8080 });
 
@@ -18,20 +19,35 @@ ws.on("connection", (socket) => {
 
       if (type === "join") {
         const { username, room } = payload;
+
         if (username && room) {
-          allSockets.push({ socket, room, username });
-          console.log("user connected " + username);
+          if (!rooms[room]) {
+            rooms[room] = [];
+          }
+          rooms[room].push({ socket, room, username });
+          console.log(`User ${username} joined room ${room}`);
+
+          rooms[room].forEach((user) => {
+            username.socket.send(
+              JSON.stringify({
+                type: "user joined",
+                payload: {
+                  username,
+                  room,
+                },
+              })
+            );
+          });
         }
       }
 
       if (type === "chat") {
-        const { message: chatMessage, username } = payload; // destructured message from payload and assigned its value to chatMessage variable
+        const { message: chatMessage, username } = payload;
         if (!chatMessage) {
           return;
         }
-        // here we have checked the person who joined and the person who is sending message is same or not and if they are then set its socket to currentUser variable
-        const currentUser = allSockets.find((user) => user.socket === socket);
 
+        const currentUser = allSockets.find((user) => user.socket === socket);
         if (!currentUser) {
           return;
         }
