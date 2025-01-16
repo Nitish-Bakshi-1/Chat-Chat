@@ -12,9 +12,8 @@ const Room = () => {
     const ws = new WebSocket("ws://localhost:8080");
 
     ws.onmessage = (event) => {
-      const mess = JSON.parse(event.data.toString());
-      console.log("Received message:", mess);
-      setMessages((prevMessages) => [...prevMessages, mess]);
+      const msg = JSON.parse(event.data.toString());
+      setMessages((prevMessages) => [...prevMessages, msg]);
     };
 
     wsRef.current = ws;
