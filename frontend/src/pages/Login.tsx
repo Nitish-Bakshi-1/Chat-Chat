@@ -8,27 +8,28 @@ const Login = () => {
   const usernameInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <div className="w-full h-screen flex justify-center items-center flex-col">
-      <h1 className="font-bold text-2xl">LOGIN</h1>
-      <input
-        className="border-2 border-black"
-        ref={usernameInputRef}
-        placeholder="username"
-      />
-      <input className="border-2 border-black" placeholder="room" />
+    <div className="w-full h-screen flex justify-center items-center">
+      <div className="flex justify-center items-center flex-col  w-[40%] h-[60vh] gap-5">
+        <h1 className="font-bold text-2xl">Enter Room</h1>
+        <input
+          className="px-8 py-4 border-2 border-black"
+          ref={usernameInputRef}
+          placeholder="username"
+        />
 
-      <button
-        onClick={() => {
-          const username = usernameInputRef.current?.value;
-          if (username) {
-            setUsername(username);
-            navigate("/room");
-          }
-        }}
-        className="p-4 focus:bg-black m-4 focus:text-white border-2 border-black"
-      >
-        ENTER ROOM
-      </button>
+        <button
+          onClick={() => {
+            const username = usernameInputRef.current?.value;
+            if (username) {
+              setUsername(username);
+              navigate("/room");
+            }
+          }}
+          className="p-4 focus:bg-black m-4 focus:text-white border-2 border-black"
+        >
+          ENTER ROOM
+        </button>
+      </div>
     </div>
   );
 };

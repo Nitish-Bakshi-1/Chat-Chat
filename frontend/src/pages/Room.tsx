@@ -62,14 +62,14 @@ const Room = () => {
         <h1 className="text-4xl uppercase font-bold">room id:123</h1>
         <div className="">
           <h1 className=" text-2xl uppercase font-semibold mb-4 ">members</h1>
-          <p>1. Ram</p>
+          <p>username</p>
           <p>2. Sham</p>
           <p>3. Balram</p>
         </div>
       </div>
-      <div className="leftPortion flex flex-col items-center justify-center pt-4 w-[70%] h-[90vh]">
-        <div className="w-full h-[80vh] flex justify-center items-center">
-          <div className="w-[95%] h-[95%] bg-[#2f3640] p-20 rounded-lg overflow-y-auto">
+      <div className="leftPortion flex flex-col items-center justify-center  w-[70%] h-[90vh]">
+        <div className="w-full h-[80vh] flex overflow-hidden justify-center items-center">
+          <div className="w-[95%] h-[95%] overflow-hidden bg-[#2f3640] p-4 lg:p-20 rounded-lg overflow-y-auto">
             {messages.map((message, index) => (
               <div
                 className={`min-h-[4vh] m-2 w-full flex ${
@@ -78,7 +78,10 @@ const Room = () => {
                 key={index}
               >
                 <span className="bg-white text-[#2f3640] px-2 py-1 rounded">
-                  {message.sender} sent = {message.text}
+                  <p className="bg-[#2f3640] text-white text-center px-2">
+                    {message.sender}
+                  </p>
+                  <p className="py-2">{message.text}</p>
                 </span>
               </div>
             ))}
