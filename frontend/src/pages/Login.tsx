@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { usernameAtom } from "../states/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { roomAtom, usernameAtom } from "../states/atoms";
 import { useRef } from "react";
 const Login = () => {
   const navigate = useNavigate();
   const setUsername = useSetRecoilState(usernameAtom);
+  const setRoom = useSetRecoilState(roomAtom);
   const usernameInputRef = useRef<HTMLInputElement | null>(null);
+  const roomInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -16,12 +18,19 @@ const Login = () => {
           ref={usernameInputRef}
           placeholder="username"
         />
+        <input
+          className="px-8 py-4 border-2 border-black"
+          ref={roomInputRef}
+          placeholder="username"
+        />
 
         <button
           onClick={() => {
             const username = usernameInputRef.current?.value;
-            if (username) {
+            const room = roomInputRef.current?.value;
+            if (username && room) {
               setUsername(username);
+              setRoom(room);
               navigate("/room");
             }
           }}

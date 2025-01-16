@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { usernameAtom } from "../states/atoms";
+import { roomAtom } from "../states/atoms";
 
 const Room = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>(
     []
   );
   const username = useRecoilValue<string>(usernameAtom);
+  const room = useRecoilValue<string>(roomAtom);
   const inputRef = useRef<HTMLInputElement>(null);
   const wsRef = useRef<WebSocket>();
 
@@ -19,7 +21,7 @@ const Room = () => {
           type: "join",
           payload: {
             username,
-            room: "red",
+            room: room,
           },
         })
       );
@@ -59,7 +61,7 @@ const Room = () => {
   return (
     <div className="w-full h-screen flex flex-col lg:flex-row justify-around items-center">
       <div className="rightPortion bg-[#ecf0f1] h-screen w-[30%] flex justify-center items-center flex-col gap-5">
-        <h1 className="text-4xl uppercase font-bold">room id:123</h1>
+        <h1 className="text-4xl uppercase font-bold">room:{room}</h1>
         <div className="">
           <h1 className=" text-2xl uppercase font-semibold mb-4 ">members</h1>
           <p>username</p>
