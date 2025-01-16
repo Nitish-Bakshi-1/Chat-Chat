@@ -29,7 +29,7 @@ ws.on("connection", (socket) => {
         if (!chatMessage) {
           return;
         }
-
+        // here we have checked the person who joined and the person who is sending message is same or not and if they are then set its socket to currentUser variable
         const currentUser = allSockets.find((user) => user.socket === socket);
 
         if (!currentUser) {
