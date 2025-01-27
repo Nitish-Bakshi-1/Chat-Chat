@@ -12,7 +12,7 @@ const Room = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const wsRef = useRef<WebSocket>();
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
+    const ws = new WebSocket("https://chat-chat-0ckn.onrender.com");
 
     ws.onopen = () => {
       ws.send(
